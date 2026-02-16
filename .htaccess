@@ -1,9 +1,21 @@
-# Al Burhan Frames - Apache Configuration
+# AlBurhan Frames - Apache Configuration
 
 # Enable Rewrite Engine
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
+    RewriteBase /frames/
+    
+    # Allow existing files and directories
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    
+    # Handle shortened URLs (e.g., /seeratframe72)
+    # Route through redirect.php for smart routing
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !^/frames/(admin|assets|uploads|gallery\.php|frame\.php|redirect\.php|process\.php|download\.php)
+    RewriteRule ^([a-zA-Z0-9_-]+)/?$ redirect.php?path=$1 [L,QSA]
 </IfModule>
 
 # Security Headers

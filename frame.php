@@ -39,29 +39,45 @@ if ($frame['is_multi_photo']) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= escape($frame['frame_name']) ?> - Al Burhan Frames</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#667eea">
+    <title><?= escape($frame['frame_name']) ?> - AlBurhan Frames</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/style.css?v=2">
+    <link rel="stylesheet" href="assets/css/style.css?v=3">
 </head>
 <body class="user-page">
     <!-- Navigation -->
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark" style="background: rgba(0,0,0,0.3);">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <strong>Al Burhan Frames</strong>
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="assets/images/logo.png" alt="AlBurhan" class="brand-logo me-2" style="max-height: 70px;">
+                <strong class="d-none d-sm-inline">AlBurhan <span class="brand-arabic d-none d-md-inline">البرہان</span></strong>
+                <strong class="d-inline d-sm-none">AlBurhan</strong>
             </a>
-            <span class="text-white-50">Professional Photo Framing</span>
+            <div class="d-flex align-items-center gap-3">
+                <?php
+                // Show back button if there are multiple frames
+                $countResult = $conn->query("SELECT COUNT(*) as total FROM frames");
+                $countRow = $countResult->fetch_assoc();
+                if ($countRow['total'] > 1) {
+                    echo '<a href="gallery.php" class="btn btn-outline-light btn-sm">';
+                    echo '<i class="bi bi-arrow-left"></i> <span class="d-none d-sm-inline">Change Frame</span>';
+                    echo '</a>';
+                }
+                ?>
+                <span class="text-white-50 small d-none d-md-inline">Professional Photo Framing</span>
+            </div>
         </div>
     </nav>
 
-    <div class="container py-5">
+    <div class="container py-3 py-md-5">
         <div class="row">
             <!-- Left Side - Editor -->
-            <div class="col-lg-8">
+            <div class="col-lg-8 mb-4 mb-lg-0">
                 <div class="card shadow-lg border-0">
-                    <div class="card-body p-4">
+                    <div class="card-body p-3 p-md-4">
                         <h4 class="mb-4"><?= escape($frame['frame_name']) ?></h4>
                         
                         <!-- Canvas Container -->

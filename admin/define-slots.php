@@ -45,36 +45,55 @@ $stmt->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Define Photo Slots - <?= escape($frame['frame_name']) ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Define Photo Slots - <?= escape($frame['frame_name']) ?> - AlBurhan</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <meta name="theme-color" content="#f9fafb">
     <style>
         #slotCanvas {
             border: 2px solid #333;
             cursor: crosshair;
             max-width: 100%;
             background-color: #f8f9fa;
+            display: block;
+            margin: 0 auto;
         }
         .slot-item {
             background-color: white;
-            padding: 15px;
+            padding: 12px;
             margin-bottom: 10px;
             border-radius: 8px;
             border: 2px solid #e9ecef;
+        }
+        @media (min-width: 768px) {
+            .slot-item {
+                padding: 15px;
+            }
         }
         .slot-item.active {
             border-color: #0d6efd;
             background-color: #e7f1ff;
         }
         .slot-item input {
-            width: 80px;
+            width: 70px;
             margin-right: 5px;
         }
+        @media (min-width: 768px) {
+            .slot-item input {
+                width: 80px;
+            }
+        }
         .slot-controls {
-            max-height: 600px;
+            max-height: 500px;
             overflow-y: auto;
+        }
+        @media (min-width: 768px) {
+            .slot-controls {
+                max-height: 600px;
+            }
         }
     </style>
 </head>
@@ -82,8 +101,10 @@ $stmt->close();
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="dashboard.php">
-                <i class="bi bi-grid-3x3-gap"></i> Al Burhan Frames Admin
+            <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
+                <img src="../assets/images/logo.png" alt="AlBurhan" class="brand-logo me-2" style="max-height: 64px;">
+                <span class="d-none d-md-inline"><i class="bi bi-grid-3x3-gap"></i> AlBurhan Admin</span>
+                <span class="d-inline d-md-none">AlBurhan</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -92,12 +113,12 @@ $stmt->close();
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">
-                            <i class="bi bi-speedometer2"></i> Dashboard
+                            <i class="bi bi-speedometer2"></i> <span class="d-none d-sm-inline">Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="logout.php">
-                            <i class="bi bi-box-arrow-right"></i> Logout
+                            <i class="bi bi-box-arrow-right"></i> <span class="d-none d-sm-inline">Logout</span>
                         </a>
                     </li>
                 </ul>

@@ -18,25 +18,29 @@ $frames = $conn->query($query);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Al Burhan Frames</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Dashboard - AlBurhan Frames</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <meta name="theme-color" content="#f9fafb">
 </head>
 <body class="admin-page">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="dashboard.php">
-                <strong>Al Burhan Frames</strong> <span class="badge bg-primary">Admin</span>
+            <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
+                <img src="../assets/images/logo.png" alt="AlBurhan" class="brand-logo me-2" style="max-height: 70px;">
+                <span class="d-none d-sm-inline"><strong>AlBurhan</strong> <span class="badge bg-primary ms-1">Admin</span></span>
+                <span class="d-inline d-sm-none"><strong>AlBurhan</strong></span>
             </a>
             <div class="d-flex align-items-center">
-                <span class="text-white me-3">
+                <span class="text-white me-2 d-none d-md-inline">
                     <i class="bi bi-person-circle"></i> <?= escape($_SESSION['admin_username']) ?>
                 </span>
                 <a href="logout.php" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-box-arrow-right"></i> Logout
+                    <i class="bi bi-box-arrow-right"></i> <span class="d-none d-sm-inline">Logout</span>
                 </a>
             </div>
         </div>
@@ -45,13 +49,16 @@ $frames = $conn->query($query);
     <div class="container-fluid py-4">
         <!-- Header -->
         <div class="row mb-4">
-            <div class="col-md-8">
-                <h2 class="mb-0">Frame Management</h2>
-                <p class="text-muted">Upload and manage your picture frames</p>
+            <div class="col-md-8 col-12 mb-3 mb-md-0">
+                <h2 class="mb-1">Frame Management</h2>
+                <p class="text-muted mb-0">Upload and manage your picture frames</p>
             </div>
-            <div class="col-md-4 text-end">
-                <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                    <i class="bi bi-cloud-upload"></i> Upload New Frame
+            <div class="col-md-4 col-12 text-md-end">
+                <a href="manage-short-urls.php" class="btn btn-outline-primary me-2 mb-2 mb-md-0">
+                    <i class="bi bi-link-45deg"></i> <span class="d-none d-sm-inline">Short URLs</span>
+                </a>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    <i class="bi bi-cloud-upload"></i> <span class="d-none d-sm-inline">Upload Frame</span>
                 </button>
             </div>
         </div>
@@ -90,19 +97,36 @@ $frames = $conn->query($query);
                                 <h6 class="card-title text-truncate" title="<?= escape($frame['frame_name']) ?>">
                                     <?= escape($frame['frame_name']) ?>
                                 </h6>
-                                <p class="card-text small text-muted">
+                                <p class="card-text small text-muted mb-1">
                                     <i class="bi bi-clock"></i> <?= date('M d, Y', strtotime($frame['created_at'])) ?>
                                 </p>
-                                <div class="share-link-container mb-2">
-                                    <input type="text" class="form-control form-control-sm share-link" 
-                                           value="<?= SITE_URL ?>/frame.php?id=<?= escape($frame['unique_id']) ?>" 
-                                           readonly>
+                                
+                                <!-- Full URL for creating short links -->
+                                <div class="mb-2">
+                                    <label class="small text-muted mb-1">Full URL (for albn.org):</label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control form-control-sm share-link" 
+                                               value="<?= SITE_URL ?>/frame.php?id=<?= escape($frame['unique_id']) ?>" 
+                                               readonly>
+                                        <button class="btn btn-success copy-link-btn" 
+                                                data-link="<?= SITE_URL ?>/frame.php?id=<?= escape($frame['unique_id']) ?>"
+                                                title="Copy this URL to create short link at albn.org">
+                                            <i class="bi bi-clipboard"></i>
+                                        </button>
+                                    </div>
                                 </div>
+                                
+                                <!-- Short URL Input -->
+                                <div class="mb-2">
+                                    <label class="small text-muted mb-1">Short URL (optional):</label>
+                                    <input type="text" class="form-control form-control-sm short-url-input" 
+                                           data-frame-id="<?= $frame['id'] ?>"
+                                           value="<?= escape($frame['short_url'] ?? '') ?>" 
+                                           placeholder="e.g., albn.org/seeratframe72">
+                                    <small class="text-muted d-block mt-1">Save the short URL you created at albn.org</small>
+                                </div>
+                                
                                 <div class="d-grid gap-2">
-                                    <button class="btn btn-sm btn-success copy-link-btn" 
-                                            data-link="<?= SITE_URL ?>/frame.php?id=<?= escape($frame['unique_id']) ?>">
-                                        <i class="bi bi-clipboard"></i> Copy Link
-                                    </button>
                                     <a href="define-slots.php?id=<?= $frame['id'] ?>" 
                                        class="btn btn-sm btn-info">
                                         <i class="bi bi-grid-3x2"></i> Define Slots <?= $frame['is_multi_photo'] ? '(' . $frame['slot_count'] . ')' : '' ?>
@@ -268,6 +292,39 @@ $frames = $conn->query($query);
                     }
                 }, 'json');
             }
+        });
+
+        // Save short URL with debouncing
+        let shortUrlTimeout;
+        $('.short-url-input').on('input', function() {
+            const input = $(this);
+            const frameId = input.data('frame-id');
+            const shortUrl = input.val().trim();
+            
+            // Clear previous timeout
+            clearTimeout(shortUrlTimeout);
+            
+            // Add loading indicator
+            input.css('border-color', '#ffc107');
+            
+            // Debounce for 1 second
+            shortUrlTimeout = setTimeout(function() {
+                $.post('save-short-url.php', {
+                    frame_id: frameId,
+                    short_url: shortUrl
+                }, function(response) {
+                    if (response.success) {
+                        input.css('border-color', '#198754');
+                        setTimeout(() => input.css('border-color', ''), 2000);
+                    } else {
+                        input.css('border-color', '#dc3545');
+                        console.error('Failed to save short URL:', response.message);
+                    }
+                }, 'json').fail(function() {
+                    input.css('border-color', '#dc3545');
+                    console.error('Failed to save short URL');
+                });
+            }, 1000);
         });
     });
     </script>

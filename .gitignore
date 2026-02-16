@@ -1,4 +1,4 @@
-# Al Burhan Frames - Git Ignore File
+# AlBurhan Frames - Git Ignore File
 
 # Uploaded files
 uploads/frames/*
@@ -9,6 +9,10 @@ uploads/photos/*
 
 # Configuration (contains sensitive data)
 config.php
+
+# Test files (remove in production)
+# Uncomment the line below for production deployment:
+# tests/
 
 # Setup script (should be deleted after use)
 setup.php
