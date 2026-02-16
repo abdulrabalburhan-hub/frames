@@ -1,0 +1,427 @@
+/* Al Burhan Frames - Professional Styling */
+
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --success-color: #059669;
+    --danger-color: #dc2626;
+    --dark-color: #1f2937;
+    --light-bg: #f9fafb;
+    --border-radius: 12px;
+    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Global Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+/* Login Page */
+.login-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-page .card {
+    border-radius: var(--border-radius);
+    backdrop-filter: blur(10px);
+}
+
+.brand-title {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Admin Page */
+.admin-page {
+    background: var(--light-bg);
+}
+
+/* Stat Cards */
+.stat-card {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+/* Frame Cards */
+.frame-card {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s, box-shadow 0.3s;
+    overflow: hidden;
+}
+
+.frame-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.frame-thumbnail {
+    height: 200px;
+    overflow: hidden;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.frame-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.share-link-container {
+    background: #f3f4f6;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.share-link {
+    font-size: 0.75rem;
+    background: white;
+}
+
+/* User Page - Frame Editor */
+.user-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.canvas-container {
+    position: relative;
+    background: #f9fafb;
+    border-radius: var(--border-radius);
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px dashed #d1d5db;
+}
+
+#photoCanvas {
+    max-width: 100%;
+    max-height: 500px;
+    display: none;
+    cursor: move;
+    border-radius: 8px;
+}
+
+#photoCanvas.active {
+    display: block;
+}
+
+.canvas-placeholder {
+    text-align: center;
+    padding: 40px;
+}
+
+/* Upload Area */
+.upload-area {
+    border: 3px dashed #d1d5db;
+    border-radius: var(--border-radius);
+    padding: 40px;
+    text-align: center;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.upload-area:hover {
+    border-color: var(--primary-color);
+    background: #eff6ff;
+}
+
+.upload-area.dragover {
+    border-color: var(--primary-color);
+    background: #dbeafe;
+    transform: scale(1.02);
+}
+
+/* Controls */
+#photoControls .form-range {
+    cursor: pointer;
+}
+
+#photoControls .form-range::-webkit-slider-thumb {
+    background: var(--primary-color);
+}
+
+#photoControls .form-range::-moz-range-thumb {
+    background: var(--primary-color);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-success {
+    background: var(--success-color);
+    border: none;
+}
+
+.btn-success:hover {
+    background: #047857;
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    border: none;
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* Loading Overlay */
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#loadingOverlay .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Cards */
+.card {
+    border-radius: var(--border-radius);
+    border: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.frame-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .canvas-container {
+        min-height: 300px;
+    }
+    
+    #photoCanvas {
+        max-height: 300px;
+    }
+    
+    .brand-title {
+        font-size: 1.5rem;
+    }
+    
+    .upload-area {
+        padding: 20px;
+    }
+}
+
+/* Navbar */
+.navbar-dark {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Controls */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Modal */
+.modal-content {
+    border-radius: var(--border-radius);
+    border: none;
+}
+
+/* Progress Bar */
+.progress {
+    border-radius: 8px;
+    height: 8px;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Alerts */
+.alert {
+    border-radius: 8px;
+    border: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Utility Classes */
+.text-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shadow-custom {
+    box-shadow: var(--shadow);
+}
+
+.shadow-lg-custom {
+    box-shadow: var(--shadow-lg);
+}
+
+/* Multi-Slot Upload Interface */
+.slot-upload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.slot-upload-box {
+    border: 2px dashed #d1d5db;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9fafb;
+}
+
+.slot-upload-box:hover {
+    border-color: var(--primary-color);
+    background-color: #eff6ff;
+    transform: translateY(-2px);
+}
+
+.slot-upload-box.selected {
+    border-color: var(--success-color);
+    border-width: 3px;
+    border-style: solid;
+    box-shadow: 0 0 15px rgba(5, 150, 105, 0.3);
+}
+
+.slot-upload-box.has-photo {
+    border-style: solid;
+    border-color: var(--success-color);
+}
+
+.slot-upload-content {
+    text-align: center;
+}
+
+.slot-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.slot-preview img {
+    max-width: 100%;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#currentSlotIndicator {
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+#currentSlotText {
+    font-weight: bold;
+    color: var(--success-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .slot-upload-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+    }
+    
+    .slot-upload-box {
+        min-height: 150px;
+        padding: 15px;
+    }
+}

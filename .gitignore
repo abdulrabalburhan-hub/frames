@@ -1,0 +1,43 @@
+# Al Burhan Frames - Git Ignore File
+
+# Uploaded files
+uploads/frames/*
+uploads/photos/*
+!uploads/frames/.gitkeep
+!uploads/photos/.gitkeep
+!uploads/frames/thumbs/.gitkeep
+
+# Configuration (contains sensitive data)
+config.php
+
+# Setup script (should be deleted after use)
+setup.php
+
+# PHP session files
+*.sess
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Backup files
+*.bak
+*.backup
+*~
