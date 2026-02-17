@@ -1,4 +1,4 @@
--- Al Burhan Frames Database Schema
+-- AlBurhan Frames Database Schema
 -- Tables creation for existing database
 
 -- NOTE: Database already exists on Hostinger (u840836793_alburhan_frame)

@@ -1,4 +1,4 @@
-// Al Burhan Frames - Frame Editor JavaScript (Multi-Photo Support)
+// AlBurhan Frames - Frame Editor JavaScript (Multi-Photo Support)
 
 let canvas, ctx;
 let userPhoto = null; // For single photo mode

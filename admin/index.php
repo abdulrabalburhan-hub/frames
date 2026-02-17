@@ -49,20 +49,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Al Burhan Frames</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Admin Login - AlBurhan Frames</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <meta name="theme-color" content="#667eea">
 </head>
 <body class="login-page">
     <div class="container">
-        <div class="row justify-content-center align-items-center min-vh-100">
-            <div class="col-md-5">
+        <div class="row justify-content-center align-items-center min-vh-100 py-4">
+            <div class="col-md-5 col-lg-4">
                 <div class="card shadow-lg border-0 rounded-lg">
-                    <div class="card-body p-5">
+                    <div class="card-body p-4 p-md-5">
                         <div class="text-center mb-4">
-                            <h1 class="brand-title">Al Burhan Frames</h1>
-                            <p class="text-muted">Admin Panel</p>
+                            <img src="../assets/images/logo.png" alt="AlBurhan Logo" class="brand-logo mb-3" style="max-height: 120px;">
+                            <h1 class="brand-title">AlBurhan <span class="brand-arabic">البرہان</span></h1>
+                            <p class="text-muted brand-subtitle">Admin Panel</p>
                         </div>
                         
                         <?php if ($error): ?>

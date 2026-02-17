@@ -1,41 +1,116 @@
-/* Al Burhan Frames - Professional Styling */
+/* AlBurhan (البرہان) Frames - Professional Mobile-First Styling */
 
 :root {
     --primary-color: #2563eb;
-    --secondary-color: #1e40af;
+    --primary-dark: #1e40af;
+    --secondary-color: #764ba2;
+    --accent-color: #667eea;
     --success-color: #059669;
     --danger-color: #dc2626;
     --dark-color: #1f2937;
     --light-bg: #f9fafb;
     --border-radius: 12px;
-    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --border-radius-sm: 8px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --transition: all 0.3s ease;
 }
 
-/* Global Styles */
+/* Global Mobile-First Styles */
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans Arabic', sans-serif;
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
     min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Logo Styles */
+.brand-logo {
+    max-height: 70px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@media (min-width: 768px) {
+    .brand-logo {
+        max-height: 80px;
+    }
+}
+
+.brand-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: inherit;
+    margin-left: 0.5rem;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@media (min-width: 768px) {
+    .brand-text {
+        font-size: 1.5rem;
+    }
+}
+
+.brand-arabic {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    -webkit-text-fill-color: var(--accent-color);
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    margin-left: 0.25rem;
+    opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+    .brand-arabic {
+        font-size: 1.125rem;
+    }
 }
 
 /* Login Page */
 .login-page {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+    padding: 1rem;
 }
 
 .login-page .card {
     border-radius: var(--border-radius);
     backdrop-filter: blur(10px);
+    border: none;
 }
 
 .brand-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .brand-title {
+        font-size: 2.25rem;
+    }
+}
+
+.brand-subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+    font-weight: 500;
 }
 
 /* Admin Page */
@@ -43,28 +118,17 @@ body {
     background: var(--light-bg);
 }
 
-/* Stat Cards */
-.stat-card {
-    border-radius: var(--border-radius);
-    border: none;
+/* Navbar Optimizations */
+.navbar {
+    padding: 0.75rem 1rem;
     box-shadow: var(--shadow);
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
-
-.stat-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: white;
+@media (max-width: 767px) {
+    .navbar .btn {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+    }
 }
 
 /* Frame Cards */
@@ -350,21 +414,196 @@ body {
     margin-bottom: 20px;
 }
 
+@media (max-width: 576px) {
+    .slot-upload-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}
+
 .slot-upload-box {
     border: 2px dashed #d1d5db;
     border-radius: 10px;
-    padding: 20px;
+    padding: 15px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
-    min-height: 180px;
+    min-height: 150px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #f9fafb;
 }
+
+@media (min-width: 768px) {
+    .slot-upload-box {
+        padding: 20px;
+        min-height: 180px;
+    }
+}
+
+.slot-upload-box.has-photo {
+    border-color: var(--success-color);
+    background: white;
+}
+
+/* Stat Cards Mobile Optimization */
+.stat-card {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 1rem;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: white;
+}
+
+@media (min-width: 768px) {
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+}
+
+/* Frame Cards Mobile Responsive */
+@media (max-width: 576px) {
+    .frame-card {
+        margin-bottom: 1rem;
+    }
+    
+    .frame-thumbnail {
+        height: 180px;
+    }
+}
+
+/* Gallery Page Mobile Optimization */
+.gallery-page .gallery-card img {
+    height: 200px;
+}
+
+@media (max-width: 768px) {
+    .gallery-page .gallery-card img {
+        height: 180px;
+    }
+}
+
+@media (min-width: 769px) {
+    .gallery-page .gallery-card img {
+        height: 250px;
+    }
+}
+
+/* Touch-Friendly Buttons */
+@media (max-width: 767px) {
+    .btn {
+        min-height: 44px;
+        font-size: 0.95rem;
+    }
+    
+    .btn-sm {
+        min-height: 36px;
+        font-size: 0.875rem;
+    }
+} 
+
+/* Mobile Form Controls */
+@media (max-width: 767px) {
+    .form-control,
+    .form-select {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 0.625rem 0.75rem;
+    }
+    
+    .form-control-sm {
+        font-size: 14px;
+        padding: 0.5rem 0.625rem;
+    }
+}
+
+/* Canvas Container Mobile */
+@media (max-width: 576px) {
+    .canvas-container {
+        min-height: 250px;
+        border-radius: var(--border-radius-sm);
+    }
+    
+    #photoCanvas {
+        max-height: 250px;
+    }
+}
+
+/* Upload Area Mobile */
+@media (max-width: 576px) {
+    .upload-area {
+        padding: 1.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .upload-area .display-4 {
+        font-size: 2rem;
+    }
+}
+
+/* Controls Panel Mobile */
+@media (max-width: 767px) {
+    #photoControls {
+        position: sticky;
+        bottom: 0;
+        background: white;
+        z-index: 100;
+        border-top: 1px solid #e5e7eb;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        padding: 1rem !important;
+        border-radius: 0;
+    }
+}
+
+/* Table Responsive */
+@media (max-width: 767px) {
+    .table {
+        font-size: 0.875rem;
+    }
+    
+    .table td,
+    .table th {
+        padding: 0.5rem;
+    }
+}
+
+/* Card Body Mobile Padding */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem;
+    }
+}
+
+/* Container Mobile */
+@media (max-width: 576px) {
+    .container,
+    .container-fluid {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
 
 .slot-upload-box:hover {
     border-color: var(--primary-color);

@@ -1,4 +1,9 @@
 <?php
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Don't display errors (we'll return them as JSON)
+ini_set('log_errors', 1);
+
 session_start();
 require_once '../config.php';
 
@@ -129,7 +134,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $conn->prepare("INSERT INTO frames (unique_id, frame_name, frame_path, thumbnail_path, file_size, file_type, uploaded_by) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $frame_path = 'uploads/frames/' . $filename;
     $thumbnail_path = 'uploads/frames/thumbs/' . $thumb_filename;
-    $stmt->bind_param("ssssssi", $unique_id, $frame_name, $frame_path, $thumbnail_path, $file['size'], $mime_type, $admin_id);
+    $file_size = (int)$file['size'];
+    $stmt->bind_param("ssssisi", $unique_id, $frame_name, $frame_path, $thumbnail_path, $file_size, $mime_type, $admin_id);
     
     if ($stmt->execute()) {
         $share_url = SITE_URL . '/frame.php?id=' . $unique_id;

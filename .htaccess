@@ -1,9 +1,19 @@
-# Al Burhan Frames - Apache Configuration
+# AlBurhan Frames - Apache Configuration
+# IMPORTANT: This .htaccess works regardless of installation directory (/, /frames/, /photo-app/, etc.)
+# No configuration needed - paths are automatically detected
 
 # Enable Rewrite Engine
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
+    
+    # Auto-detect base path - no manual configuration needed
+    # Uncomment the line below ONLY if you have issues with subdirectory installs
+    # RewriteBase /
+    
+    # Allow existing files and directories
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
 </IfModule>
 
 # Security Headers
@@ -38,9 +48,9 @@
 # Prevent directory listing
 Options -Indexes
 
-# Custom error pages
-ErrorDocument 404 /404.php
-ErrorDocument 403 /403.php
+# Custom error pages (relative paths work from any installation directory)
+ErrorDocument 404 404.php
+ErrorDocument 403 403.php
 
 # Compress text files for faster loading
 <IfModule mod_deflate.c>
@@ -57,8 +67,7 @@ ErrorDocument 403 /403.php
 </IfModule>
 
 # Protect uploads directory from PHP execution
-<FilesMatch "\.php$">
-    <If "%{REQUEST_URI} =~ m#^/alburhanframes\.online/uploads/#">
-        Require all denied
-    </If>
-</FilesMatch>
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_URI} ^.*/uploads/.*\.php$
+    RewriteRule .* - [F,L]
+</IfModule>
