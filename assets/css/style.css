@@ -64,7 +64,11 @@ body {
 .brand-arabic {
     font-size: 1rem;
     font-weight: 600;
-    color: inherit;
+    color: var(--accent-color);
+    -webkit-text-fill-color: var(--accent-color);
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
     margin-left: 0.25rem;
     opacity: 0.9;
 }
