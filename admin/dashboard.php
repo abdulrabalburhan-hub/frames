@@ -294,21 +294,23 @@ $frames = $conn->query($query);
             }
         });
 
-        // Save short URL with debouncing
-        let shortUrlTimeout;
+        // Save short URL with per-input debouncing
         $('.short-url-input').on('input', function() {
             const input = $(this);
             const frameId = input.data('frame-id');
             const shortUrl = input.val().trim();
             
-            // Clear previous timeout
-            clearTimeout(shortUrlTimeout);
+            // Clear previous timeout for THIS input only
+            const existingTimeout = input.data('timeout-id');
+            if (existingTimeout) {
+                clearTimeout(existingTimeout);
+            }
             
             // Add loading indicator
             input.css('border-color', '#ffc107');
             
-            // Debounce for 1 second
-            shortUrlTimeout = setTimeout(function() {
+            // Debounce for 1 second (store timeout per input)
+            const timeoutId = setTimeout(function() {
                 $.post('save-short-url.php', {
                     frame_id: frameId,
                     short_url: shortUrl
@@ -325,6 +327,9 @@ $frames = $conn->query($query);
                     console.error('Failed to save short URL');
                 });
             }, 1000);
+            
+            // Store timeout ID on the input element
+            input.data('timeout-id', timeoutId);
         });
     });
     </script>

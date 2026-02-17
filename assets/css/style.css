@@ -440,11 +440,6 @@ body {
     }
 }
 
-.slot-upload-box:hover {
-    border-color: var(--primary-color);
-    background-color: #eff6ff;
-}
-
 .slot-upload-box.has-photo {
     border-color: var(--success-color);
     background: white;

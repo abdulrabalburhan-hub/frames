@@ -137,7 +137,7 @@ If returns empty, apply `add_short_url_field.sql`
 ### Existing Installation
 - Check which features are missing
 - Apply only needed migrations
-- Migrations are idempotent (safe to re-run with minor warnings)
+- **Important**: Migrations must only be applied ONCE per database. Re-running will cause errors unless columns are checked manually first.
 
 ---
 

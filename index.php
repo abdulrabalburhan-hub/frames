@@ -4,6 +4,15 @@ require_once 'config.php';
 
 // Count total available frames
 $result = $conn->query("SELECT COUNT(*) as total FROM frames");
+
+// Guard against query failure
+if ($result === false) {
+    http_response_code(500);
+    error_log("Database query failed in index.php: " . $conn->error);
+    include '404.php';
+    exit();
+}
+
 $row = $result->fetch_assoc();
 $totalFrames = (int)$row['total'];
 

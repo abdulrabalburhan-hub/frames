@@ -1,0 +1,11 @@
+# AlBurhan Frames - Tests Directory Protection
+# Block all web access to diagnostic/test scripts
+
+# Deny all access (Apache 2.4 syntax)
+Require all denied
+
+# Alternative for Apache 2.2
+<IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+</IfModule>

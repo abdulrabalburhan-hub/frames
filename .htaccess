@@ -14,15 +14,6 @@
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
-    
-    # Handle shortened URLs (e.g., /seeratframe72)
-    # Route through redirect.php for smart routing
-    # Exclude core application paths (admin panel, assets, etc.)
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} !/(admin|assets|uploads|tests|migrations|docs)/
-    RewriteCond %{REQUEST_URI} !\.(php|css|js|jpg|jpeg|png|gif|ico)$
-    RewriteRule ^([a-zA-Z0-9_-]+)/?$ redirect.php?path=$1 [L,QSA]
 </IfModule>
 
 # Security Headers

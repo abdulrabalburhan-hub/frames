@@ -2,6 +2,31 @@
 
 This directory contains diagnostic and testing utilities for the AlBurhan Frames application.
 
+## ⚠️ SECURITY WARNING
+
+**These test files expose sensitive configuration and database information.**
+
+### Protection Status
+- ✅ **Web access blocked** - A `.htaccess` file in this directory denies all HTTP access
+- ⚠️ **Local access only** - Access these files only from command line or local file system
+
+### Production Deployment
+**Before deploying to production:**
+1. Delete the entire `tests/` directory, OR
+2. Verify the `.htaccess` file is present and working
+3. Test that accessing `https://yourdomain.com/tests/test_db.php` returns 403 Forbidden
+
+**What these files expose:**
+- Database credentials (host, name, username)
+- Admin usernames and password hashes
+- Directory structure and permissions
+- PHP configuration details
+- Database schema information
+
+**Never commit sensitive test results** or leave test files accessible in production!
+
+---
+
 ## Files
 
 ### test_db.php

@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 
 echo "<h2>Testing Database Connection</h2>";
 
-require_once 'config.php';
+require_once '../config.php';
 
 echo "✓ Config loaded<br>";
 echo "Database: " . DB_NAME . "<br>";
