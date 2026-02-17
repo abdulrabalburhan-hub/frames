@@ -39,9 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'message' => 'Short URL saved successfully'
         ]);
     } else {
+        // Log detailed error server-side without exposing it to the client
+        error_log('Error saving short URL for frame_id ' . $frame_id . ': ' . $stmt->error);
         echo json_encode([
             'success' => false,
-            'message' => 'Failed to save short URL: ' . $conn->error
+            'message' => 'Failed to save short URL'
         ]);
     }
     
