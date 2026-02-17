@@ -8,6 +8,11 @@ require_once 'config.php';
 
 // Count total available frames
 $result = $conn->query("SELECT COUNT(*) as total FROM frames");
+
+if ($result === false) {
+    http_response_code(500);
+    exit();
+}
 $row = $result->fetch_assoc();
 $totalFrames = (int)$row['total'];
 
