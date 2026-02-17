@@ -34,10 +34,14 @@ A professional photo framing web application that allows users to upload photos,
 
 ### Installation
 
+**Flexible Installation:** This application can be installed in any directory - root (`/`), subdirectory (`/frames/`, `/photo-app/`), or custom path. No `.htaccess` modifications needed!
+
 1. **Clone or download** the project to your web server:
    ```bash
-   cd c:\xampp\htdocs\
-   # Place the 'frames' directory here
+   # Example installations (choose any):
+   cd c:\xampp\htdocs\              # For root: http://localhost/
+   cd c:\xampp\htdocs\frames\        # For subdirectory: http://localhost/frames/
+   cd c:\xampp\htdocs\my-app\        # For custom: http://localhost/my-app/
    ```
 
 2. **Create the database**:
@@ -45,15 +49,20 @@ A professional photo framing web application that allows users to upload photos,
    - Create database: `alburhan_frames`
    - Import: `database.sql`
 
-3. **Configure database connection**:
+3. **Configure database connection and site URL**:
    - Edit `config.php`
-   - Update credentials:
+   - Update credentials and SITE_URL:
      ```php
      define('DB_HOST', 'localhost');
      define('DB_USER', 'root');
      define('DB_PASS', '');
      define('DB_NAME', 'alburhan_frames');
+     define('SITE_URL', 'http://localhost/frames'); // Change to your actual URL
      ```
+   - **Important:** Set `SITE_URL` to match your installation directory:
+     - Root install: `http://localhost`
+     - Subdirectory: `http://localhost/frames`
+     - Production: `https://yourdomain.com` or `https://yourdomain.com/app`
 
 4. **Enable GD extension** (for image processing):
    - Open `php.ini`
@@ -67,7 +76,7 @@ A professional photo framing web application that allows users to upload photos,
    ```
 
 6. **Access the application**:
-   - Local: `http://localhost/frames/`
+   - Local: `http://localhost/frames/` (or your configured path)
    - Admin: `http://localhost/frames/admin/`
    - Default login: `admin` / `Admin@123`
 
@@ -225,8 +234,21 @@ define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'alburhan_frames');
-define('BASE_URL', 'http://localhost/frames/');
+define('SITE_URL', 'http://localhost/frames'); // No trailing slash!
 ```
+
+**IMPORTANT:** `SITE_URL` must match your installation directory:
+- Root directory: `http://localhost` or `https://yourdomain.com`
+- Subdirectory: `http://localhost/frames` or `https://yourdomain.com/photo-app`
+- **Never** include a trailing slash
+
+### Installation Directory Flexibility
+The application automatically detects its installation path. You can install it:
+- At server root: `/` (e.g., `http://localhost/`)
+- In a subdirectory: `/frames/` (e.g., `http://localhost/frames/`)
+- Any custom path: `/my-photo-app/` (e.g., `http://localhost/my-photo-app/`)
+
+No `.htaccess` modifications required - just set the `SITE_URL` in `config.php` correctly.
 
 ### Upload Limits
 ```php

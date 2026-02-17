@@ -1,9 +1,14 @@
 # AlBurhan Frames - Apache Configuration
+# IMPORTANT: This .htaccess works regardless of installation directory (/, /frames/, /photo-app/, etc.)
+# No configuration needed - paths are automatically detected
 
 # Enable Rewrite Engine
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /frames/
+    
+    # Auto-detect base path - no manual configuration needed
+    # Uncomment the line below ONLY if you have issues with subdirectory installs
+    # RewriteBase /
     
     # Allow existing files and directories
     RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -12,9 +17,11 @@
     
     # Handle shortened URLs (e.g., /seeratframe72)
     # Route through redirect.php for smart routing
+    # Exclude core application paths (admin panel, assets, etc.)
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} !^/frames/(admin|assets|uploads|gallery\.php|frame\.php|redirect\.php|process\.php|download\.php)
+    RewriteCond %{REQUEST_URI} !/(admin|assets|uploads|tests|migrations|docs)/
+    RewriteCond %{REQUEST_URI} !\.(php|css|js|jpg|jpeg|png|gif|ico)$
     RewriteRule ^([a-zA-Z0-9_-]+)/?$ redirect.php?path=$1 [L,QSA]
 </IfModule>
 
@@ -50,9 +57,9 @@
 # Prevent directory listing
 Options -Indexes
 
-# Custom error pages
-ErrorDocument 404 /404.php
-ErrorDocument 403 /403.php
+# Custom error pages (relative paths work from any installation directory)
+ErrorDocument 404 404.php
+ErrorDocument 403 403.php
 
 # Compress text files for faster loading
 <IfModule mod_deflate.c>
@@ -69,8 +76,7 @@ ErrorDocument 403 /403.php
 </IfModule>
 
 # Protect uploads directory from PHP execution
-<FilesMatch "\.php$">
-    <If "%{REQUEST_URI} =~ m#^/alburhanframes\.online/uploads/#">
-        Require all denied
-    </If>
-</FilesMatch>
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_URI} ^.*/uploads/.*\.php$
+    RewriteRule .* - [F,L]
+</IfModule>

@@ -4,6 +4,27 @@ This directory contains detailed guides and setup instructions for the AlBurhan 
 
 ## Files
 
+### INSTALLATION_PATHS.md
+**Purpose**: Complete guide for flexible installation in any directory
+
+**Contents**:
+- Supported installation paths (root, subdirectory, custom)
+- Configuration steps for different scenarios
+- SITE_URL setup guide
+- Troubleshooting installation issues
+- Migration between directories
+- Production deployment checklist
+
+**Target Audience**: Developers, System Administrators, DevOps
+
+**When to read**:
+- Before installing the application
+- When moving to a different directory
+- Deploying to production server
+- Troubleshooting path-related issues
+
+---
+
 ### URL_SHORTENER_SETUP.md
 **Purpose**: Comprehensive guide for URL shortener integration
 
