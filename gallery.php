@@ -8,6 +8,12 @@ require_once 'config.php';
 $query = "SELECT * FROM frames ORDER BY created_at DESC";
 $frames = $conn->query($query);
 
+if ($frames === false) {
+    // Database query failed; return a generic 500 error without exposing details
+    http_response_code(500);
+    echo 'An unexpected error occurred. Please try again later.';
+    exit();
+}
 if ($frames->num_rows === 0) {
     http_response_code(404);
     include '404.php';
