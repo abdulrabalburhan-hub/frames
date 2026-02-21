@@ -66,6 +66,45 @@ ADD INDEX `idx_short_url` (`short_url`);
 
 ---
 
+### add_supporters_and_stats.sql
+**Purpose**: Add download tracking and campaign supporters gallery
+
+**Applied**: Campaign analytics and social proof feature
+
+**Changes**:
+- Adds `download_count` column to `frames` table
+- Creates `frame_supporters` table for storing supporter thumbnails
+- Adds indexes for optimal query performance
+
+**When to apply**:
+- When enabling download statistics tracking
+- When adding campaign supporters gallery feature
+- Should be applied ONCE per installation
+
+**SQL Preview**:
+```sql
+ALTER TABLE `frames` 
+ADD COLUMN `download_count` INT(11) NOT NULL DEFAULT 0;
+
+CREATE TABLE `frame_supporters` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `frame_id` int(11) NOT NULL,
+  `thumbnail_path` varchar(500) NOT NULL,
+  `thumbnail_size` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  ...
+);
+```
+
+**Additional Setup Required**:
+1. Create directory: `uploads/supporters/thumbs/`
+2. Set permissions: `chmod -R 755 uploads/supporters/`
+3. Verify GD extension enabled in PHP
+
+**Documentation**: See `docs/CAMPAIGN_SUPPORTERS_FEATURE.md` for full details
+
+---
+
 ## How to Apply Migrations
 
 ### Method 1: phpMyAdmin (Recommended)
@@ -188,6 +227,20 @@ ALTER TABLE `frames` DROP COLUMN `is_multi_photo`;
 ```sql
 ALTER TABLE `frames` DROP INDEX `idx_short_url`;
 ALTER TABLE `frames` DROP COLUMN `short_url`;
+```
+
+### Rollback download tracking & supporters feature:
+```sql
+-- Remove index
+DROP INDEX idx_frame_created ON frame_supporters;
+
+-- Drop supporters table (⚠️ deletes all supporter thumbnails)
+DROP TABLE IF EXISTS frame_supporters;
+
+-- Remove download_count column
+ALTER TABLE frames DROP COLUMN download_count;
+
+-- Manually delete thumbnail files from uploads/supporters/thumbs/
 ```
 
 ---

@@ -13,6 +13,19 @@ $query = "SELECT f.*, a.username as uploaded_by_name
           LEFT JOIN admin_users a ON f.uploaded_by = a.id 
           ORDER BY f.created_at DESC";
 $frames = $conn->query($query);
+
+// Calculate statistics
+$statsQuery = "SELECT 
+    COUNT(*) as total_frames,
+    COALESCE(SUM(download_count), 0) as total_downloads
+FROM frames";
+$statsResult = $conn->query($statsQuery);
+$stats = $statsResult->fetch_assoc();
+
+$supportersQuery = "SELECT COUNT(*) as total_supporters FROM frame_supporters";
+$supportersResult = $conn->query($supportersQuery);
+$supportersStats = $supportersResult->fetch_assoc();
+$stats['total_supporters'] = $supportersStats['total_supporters'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,16 +78,46 @@ $frames = $conn->query($query);
 
         <!-- Stats Cards -->
         <div class="row mb-4">
-            <div class="col-md-4">
+            <div class="col-md-4 mb-3 mb-md-0">
                 <div class="card stat-card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="text-muted mb-1">Total Frames</h6>
-                                <h2 class="mb-0"><?= $frames->num_rows ?></h2>
+                                <h2 class="mb-0"><?= $stats['total_frames'] ?></h2>
                             </div>
                             <div class="stat-icon bg-primary">
                                 <i class="bi bi-images"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted mb-1">Total Downloads</h6>
+                                <h2 class="mb-0"><?= number_format($stats['total_downloads']) ?></h2>
+                            </div>
+                            <div class="stat-icon bg-success">
+                                <i class="bi bi-download"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted mb-1">Campaign Supporters</h6>
+                                <h2 class="mb-0"><?= number_format($stats['total_supporters']) ?></h2>
+                            </div>
+                            <div class="stat-icon bg-info">
+                                <i class="bi bi-people-fill"></i>
                             </div>
                         </div>
                     </div>
@@ -99,6 +142,11 @@ $frames = $conn->query($query);
                                 </h6>
                                 <p class="card-text small text-muted mb-1">
                                     <i class="bi bi-clock"></i> <?= date('M d, Y', strtotime($frame['created_at'])) ?>
+                                </p>
+                                <p class="card-text small mb-2">
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-download"></i> <?= number_format($frame['download_count']) ?> downloads
+                                    </span>
                                 </p>
                                 
                                 <!-- Full URL for creating short links -->

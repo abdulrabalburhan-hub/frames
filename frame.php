@@ -46,6 +46,53 @@ if ($frame['is_multi_photo']) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/style.css?v=3">
+    <style>
+        /* Campaign Supporters Gallery Styles */
+        .supporters-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        @media (min-width: 768px) {
+            .supporters-gallery {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 10px;
+            }
+        }
+        .supporter-thumb {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .supporter-thumb:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .supporter-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Custom scrollbar for supporters gallery */
+        .supporters-gallery::-webkit-scrollbar {
+            width: 6px;
+        }
+        .supporters-gallery::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .supporters-gallery::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .supporters-gallery::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body class="user-page">
     <!-- Navigation -->
@@ -214,7 +261,7 @@ if ($frame['is_multi_photo']) {
                 </div>
                 
                 <!-- Instructions Card -->
-                <div class="card shadow-sm border-0">
+                <div class="card shadow-sm border-0 mb-3">
                     <div class="card-body">
                         <h6 class="card-title"><i class="bi bi-lightbulb"></i> Instructions</h6>
                         <ol class="small mb-0 ps-3">
@@ -223,6 +270,28 @@ if ($frame['is_multi_photo']) {
                             <li>Drag to position your photo</li>
                             <li>Download the final result</li>
                         </ol>
+                    </div>
+                </div>
+                
+                <!-- Campaign Supporters Gallery -->
+                <div class="card shadow-sm border-0" id="supportersCard">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">
+                            <i class="bi bi-people-fill text-success"></i> Campaign Supporters
+                            <span class="badge bg-success ms-2" id="supportersCount">0</span>
+                        </h6>
+                        <div id="supportersGallery" class="supporters-gallery">
+                            <div class="text-center text-muted small py-3">
+                                <div class="spinner-border spinner-border-sm" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mb-0 mt-2">Loading supporters...</p>
+                            </div>
+                        </div>
+                        <div id="supportersEmpty" class="text-center text-muted small py-3" style="display: none;">
+                            <i class="bi bi-person-plus-fill"></i>
+                            <p class="mb-0 mt-2">Be the first to support this campaign!</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -255,7 +324,51 @@ if ($frame['is_multi_photo']) {
         // Start editor when DOM is ready
         $(document).ready(function() {
             initFrameEditor(frameData);
+            loadCampaignSupporters(frameData.id);
         });
+        
+        // Load campaign supporters gallery
+        function loadCampaignSupporters(frameId) {
+            $.ajax({
+                url: 'api-supporters.php',
+                type: 'GET',
+                data: {
+                    frame_id: frameId,
+                    limit: 50
+                },
+                success: function(response) {
+                    if (response.success) {
+                        const supporters = response.supporters;
+                        const totalCount = response.total_supporters;
+                        
+                        // Update count badge
+                        $('#supportersCount').text(totalCount);
+                        
+                        if (supporters.length === 0) {
+                            // Show empty state
+                            $('#supportersGallery').hide();
+                            $('#supportersEmpty').show();
+                        } else {
+                            // Build gallery HTML
+                            let galleryHtml = '';
+                            supporters.forEach(function(supporter) {
+                                galleryHtml += '<div class="supporter-thumb">';
+                                galleryHtml += '<img src="' + supporter.thumbnail + '" alt="Supporter" loading="lazy">';
+                                galleryHtml += '</div>';
+                            });
+                            
+                            $('#supportersGallery').html(galleryHtml);
+                            $('#supportersGallery').show();
+                            $('#supportersEmpty').hide();
+                        }
+                    }
+                },
+                error: function() {
+                    // On error, just hide the loading state
+                    $('#supportersGallery').html('<p class="text-muted small text-center mb-0">Unable to load supporters</p>');
+                }
+            });
+        }
     </script>
 </body>
 </html>
