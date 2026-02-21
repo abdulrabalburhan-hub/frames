@@ -10,19 +10,23 @@ A professional photo framing web application that allows users to upload photos,
 - **Smart Routing** - Automatically directs to single frame or gallery based on available frames
 - **URL Shortening Integration** - Works with external shorteners (albn.org) for easy sharing
 - **Mobile-First Design** - Optimized for touch devices with responsive layouts
+- **Download Tracking** - Track how many times each frame has been downloaded
+- **Campaign Supporters Gallery** - Showcase thumbnails of supporters who downloaded frames
 
 ### Admin Panel
 - **Frame Management** - Upload, configure, and delete frames
 - **Visual Slot Editor** - Define photo slot positions using interactive canvas
 - **Short URL Tracking** - Save and manage shortened URLs for each frame
 - **Session Management** - Secure admin authentication with session timeout
+- **Download Analytics** - View download statistics and supporter counts for each frame
 
 ### User Experience
-- **Frame Gallery** - Browse all available frames in responsive grid layout
+- **Frame Gallery** - Browse all available frames in responsive grid layout with download counts
 - **Photo Upload** - Support for JPG and PNG images with size limits
 - **Real-time Preview** - See changes instantly on canvas
 - **Touch-Friendly Controls** - 44px minimum touch targets, iOS zoom prevention
 - **Lazy Loading** - Optimized image loading for better performance
+- **Supporters Showcase** - View campaign supporters gallery when editing frames
 
 ## 🚀 Quick Start
 
@@ -87,6 +91,27 @@ A professional photo framing web application that allows users to upload photos,
 3. **Define photo slots** - Use the visual editor to set slot positions
 4. **Test the frame** - Visit the user-facing editor
 5. **Create short URL** - Use albn.org to create shareable links
+
+### ⭐ New Features Setup (Download Tracking & Campaign Supporters)
+
+To enable download tracking and campaign supporters gallery:
+
+1. **Run database migration**:
+   - Import `migrations/add_supporters_and_stats.sql` in phpMyAdmin
+   - Or see `SETUP_NEW_FEATURES.md` for quick setup
+
+2. **Create supporters directory**:
+   ```bash
+   mkdir uploads/supporters/thumbs
+   chmod -R 755 uploads/supporters/
+   ```
+
+3. **Features will automatically activate**:
+   - Download counts appear on gallery frame cards
+   - Supporter thumbnails display on frame editor page
+   - Admin dashboard shows download statistics
+
+📖 **Full Documentation**: See `docs/CAMPAIGN_SUPPORTERS_FEATURE.md` for complete details
 
 ## 📁 Project Structure
 

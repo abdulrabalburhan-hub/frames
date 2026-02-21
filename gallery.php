@@ -110,6 +110,32 @@ if ($frames->num_rows === 1) {
                 font-size: 12px;
             }
         }
+        .download-count-badge {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(34, 197, 94, 0.95);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        @media (min-width: 768px) {
+            .download-count-badge {
+                bottom: 12px;
+                left: 12px;
+                padding: 5px 12px;
+                font-size: 11px;
+                gap: 5px;
+            }
+        }
+        .download-count-badge i {
+            font-size: 12px;
+        }
     </style>
 </head>
 <body class="gallery-page">
@@ -145,6 +171,19 @@ if ($frames->num_rows === 1) {
                             <?php if ($frame['is_multi_photo']): ?>
                                 <span class="frame-badge">
                                     <i class="bi bi-collection"></i> <?= $frame['slot_count'] ?>
+                                </span>
+                            <?php endif; ?>
+                            <?php if ($frame['download_count'] > 0): ?>
+                                <span class="download-count-badge" title="<?= number_format($frame['download_count']) ?> downloads">
+                                    <i class="bi bi-download"></i> 
+                                    <?php 
+                                        // Format large numbers (e.g., 1.2K, 5.3K)
+                                        if ($frame['download_count'] >= 1000) {
+                                            echo number_format($frame['download_count'] / 1000, 1) . 'K';
+                                        } else {
+                                            echo number_format($frame['download_count']);
+                                        }
+                                    ?>
                                 </span>
                             <?php endif; ?>
                             <img src="<?= escape($frame['thumbnail_path']) ?>" 

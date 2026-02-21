@@ -166,6 +166,12 @@ try {
     imagejpeg($composite, null, 85);
     $imageData = ob_get_clean();
     
+    // Save supporter thumbnail (storage-optimized)
+    $thumbnailSaved = saveSupporterThumbnail($composite, $frame_id);
+    
+    // Increment download count for this frame
+    incrementDownloadCount($frame_id);
+    
     imagedestroy($frame_img);
     imagedestroy($composite);
     
@@ -173,7 +179,8 @@ try {
         'success' => true,
         'message' => 'Photo processed successfully',
         'image_data' => base64_encode($imageData),
-        'filename' => $filename
+        'filename' => $filename,
+        'supporter_saved' => $thumbnailSaved
     ]);
     
 } catch (Exception $e) {
@@ -181,6 +188,97 @@ try {
         'success' => false,
         'message' => 'Error processing image: ' . $e->getMessage()
     ]);
+}
+
+/**
+ * Save a thumbnail of the supporter's framed photo
+ * Optimized for storage: 120x120px, JPEG quality 75
+ */
+function saveSupporterThumbnail($composite, $frame_id) {
+    global $conn;
+    
+    try {
+        // Create thumbnail directory if it doesn't exist
+        $thumbDir = __DIR__ . '/uploads/supporters/thumbs';
+        if (!file_exists($thumbDir)) {
+            mkdir($thumbDir, 0755, true);
+        }
+        
+        // Get original dimensions
+        $originalWidth = imagesx($composite);
+        $originalHeight = imagesy($composite);
+        
+        // Calculate thumbnail size (120x120 maintains visibility while minimizing storage)
+        $thumbSize = 120;
+        $thumbWidth = $thumbSize;
+        $thumbHeight = $thumbSize;
+        
+        // Determine crop dimensions to maintain aspect ratio
+        if ($originalWidth > $originalHeight) {
+            $sourceSize = $originalHeight;
+            $sourceX = ($originalWidth - $originalHeight) / 2;
+            $sourceY = 0;
+        } else {
+            $sourceSize = $originalWidth;
+            $sourceX = 0;
+            $sourceY = ($originalHeight - $originalWidth) / 2;
+        }
+        
+        // Create thumbnail image
+        $thumbnail = imagecreatetruecolor($thumbWidth, $thumbHeight);
+        $white = imagecolorallocate($thumbnail, 255, 255, 255);
+        imagefill($thumbnail, 0, 0, $white);
+        
+        // Resample to thumbnail size (square crop from center)
+        imagecopyresampled(
+            $thumbnail, $composite,
+            0, 0, $sourceX, $sourceY,
+            $thumbWidth, $thumbHeight, $sourceSize, $sourceSize
+        );
+        
+        // Generate unique filename
+        $timestamp = time();
+        $random = mt_rand(1000, 9999);
+        $filename = 'supporter_' . $frame_id . '_' . $timestamp . '_' . $random . '.jpg';
+        $filepath = $thumbDir . '/' . $filename;
+        $relativePath = 'uploads/supporters/thumbs/' . $filename;
+        
+        // Save with optimized quality (75 provides good balance)
+        imagejpeg($thumbnail, $filepath, 75);
+        $fileSize = filesize($filepath);
+        
+        imagedestroy($thumbnail);
+        
+        // Save to database
+        $stmt = $conn->prepare("INSERT INTO frame_supporters (frame_id, thumbnail_path, thumbnail_size) VALUES (?, ?, ?)");
+        $stmt->bind_param("isi", $frame_id, $relativePath, $fileSize);
+        $result = $stmt->execute();
+        $stmt->close();
+        
+        return $result;
+        
+    } catch (Exception $e) {
+        error_log("Error saving supporter thumbnail: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Increment the download count for a frame
+ */
+function incrementDownloadCount($frame_id) {
+    global $conn;
+    
+    try {
+        $stmt = $conn->prepare("UPDATE frames SET download_count = download_count + 1 WHERE id = ?");
+        $stmt->bind_param("i", $frame_id);
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+    } catch (Exception $e) {
+        error_log("Error incrementing download count: " . $e->getMessage());
+        return false;
+    }
 }
 
 /**
