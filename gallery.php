@@ -165,6 +165,12 @@ if ($frames->num_rows === 1) {
         <!-- Frames Grid -->
         <div class="row g-3 g-md-4">
             <?php while ($frame = $frames->fetch_assoc()): ?>
+                <?php
+                    $thumbnailPath = $frame['thumbnail_path'];
+                    $framePath = $frame['frame_path'];
+                    $thumbnailFile = __DIR__ . '/' . ltrim($thumbnailPath, '/\\');
+                    $previewPath = is_file($thumbnailFile) ? $thumbnailPath : $framePath;
+                ?>
                 <div class="col-6 col-sm-6 col-md-4 col-lg-3">
                     <div class="card gallery-card" onclick="window.location.href='frame.php?id=<?= escape($frame['unique_id']) ?>'">
                         <div style="position: relative;">
@@ -186,11 +192,11 @@ if ($frames->num_rows === 1) {
                                     ?>
                                 </span>
                             <?php endif; ?>
-                            <img src="<?= escape($frame['thumbnail_path']) ?>" 
+                               <img src="<?= escape($previewPath) ?>" 
                                  class="card-img-top" 
                                  alt="<?= escape($frame['frame_name']) ?>"
                                  loading="lazy"
-                                 onerror="this.src='https://via.placeholder.com/300x250?text=Frame+Image'">
+                                   onerror="this.onerror=null; this.src='<?= escape($framePath) ?>'">
                         </div>
                         <div class="card-body text-center p-2 p-md-3">
                             <h6 class="card-title mb-1 mb-md-2" style="font-size: 0.95rem;"><?= escape($frame['frame_name']) ?></h6>

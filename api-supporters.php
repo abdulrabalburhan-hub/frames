@@ -6,8 +6,8 @@ header('Content-Type: application/json');
 
 // Get frame ID from request
 $frame_id = isset($_GET['frame_id']) ? intval($_GET['frame_id']) : 0;
-$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 50; // Default to 50 supporters
-$offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+$limit = isset($_GET['limit']) ? max(1, intval($_GET['limit'])) : null;
+$offset = isset($_GET['offset']) ? max(0, intval($_GET['offset'])) : 0;
 
 // Validate frame ID
 if ($frame_id <= 0) {
@@ -37,14 +37,22 @@ try {
     $stmt->close();
     
     // Fetch supporters (most recent first)
-    $stmt = $conn->prepare("
-        SELECT thumbnail_path, created_at 
-        FROM frame_supporters 
-        WHERE frame_id = ? 
-        ORDER BY created_at DESC 
-        LIMIT ? OFFSET ?
-    ");
-    $stmt->bind_param("iii", $frame_id, $limit, $offset);
+    $supportersQuery = "
+        SELECT thumbnail_path, created_at
+        FROM frame_supporters
+        WHERE frame_id = ?
+        ORDER BY created_at DESC";
+
+    if ($limit !== null) {
+        $supportersQuery .= " LIMIT ? OFFSET ?";
+    }
+
+    $stmt = $conn->prepare($supportersQuery);
+    if ($limit !== null) {
+        $stmt->bind_param("iii", $frame_id, $limit, $offset);
+    } else {
+        $stmt->bind_param("i", $frame_id);
+    }
     $stmt->execute();
     $result = $stmt->get_result();
     
@@ -72,9 +80,9 @@ try {
         'download_count' => $frame['download_count'],
         'total_supporters' => $totalSupporters,
         'supporters' => $supporters,
-        'limit' => $limit,
+        'limit' => $limit ?? $totalSupporters,
         'offset' => $offset,
-        'has_more' => ($offset + $limit) < $totalSupporters
+        'has_more' => $limit !== null && ($offset + $limit) < $totalSupporters
     ]);
     
 } catch (Exception $e) {
