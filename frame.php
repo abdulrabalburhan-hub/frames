@@ -333,8 +333,7 @@ if ($frame['is_multi_photo']) {
                 url: 'api-supporters.php',
                 type: 'GET',
                 data: {
-                    frame_id: frameId,
-                    limit: 50
+                    frame_id: frameId
                 },
                 success: function(response) {
                     if (response.success) {

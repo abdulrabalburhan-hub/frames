@@ -129,12 +129,19 @@ $stats['total_supporters'] = $supportersStats['total_supporters'];
         <div class="row">
             <?php if ($frames->num_rows > 0): ?>
                 <?php while ($frame = $frames->fetch_assoc()): ?>
+                    <?php
+                        $thumbnailPath = $frame['thumbnail_path'];
+                        $framePath = $frame['frame_path'];
+                        $thumbnailFile = __DIR__ . '/../' . ltrim($thumbnailPath, '/\\');
+                        $previewPath = is_file($thumbnailFile) ? '../' . ltrim($thumbnailPath, '/\\') : '../' . ltrim($framePath, '/\\');
+                    ?>
                     <div class="col-md-3 mb-4">
                         <div class="card frame-card h-100">
                             <div class="frame-thumbnail">
-                                <img src="../<?= escape($frame['thumbnail_path']) ?>" 
+                                <img src="<?= escape($previewPath) ?>" 
                                      class="card-img-top" 
-                                     alt="<?= escape($frame['frame_name']) ?>">
+                                     alt="<?= escape($frame['frame_name']) ?>"
+                                     onerror="this.onerror=null; this.src='../<?= escape($framePath) ?>'">
                             </div>
                             <div class="card-body">
                                 <h6 class="card-title text-truncate" title="<?= escape($frame['frame_name']) ?>">
@@ -175,6 +182,11 @@ $stats['total_supporters'] = $supportersStats['total_supporters'];
                                 </div>
                                 
                                 <div class="d-grid gap-2">
+                                    <button class="btn btn-sm btn-outline-primary edit-frame-btn"
+                                            data-id="<?= $frame['id'] ?>"
+                                            data-name="<?= escape($frame['frame_name']) ?>">
+                                        <i class="bi bi-pencil"></i> Edit Name
+                                    </button>
                                     <a href="define-slots.php?id=<?= $frame['id'] ?>" 
                                        class="btn btn-sm btn-info">
                                         <i class="bi bi-grid-3x2"></i> Define Slots <?= $frame['is_multi_photo'] ? '(' . $frame['slot_count'] . ')' : '' ?>
@@ -243,6 +255,34 @@ $stats['total_supporters'] = $supportersStats['total_supporters'];
         </div>
     </div>
 
+    <!-- Edit Frame Name Modal -->
+    <div class="modal fade" id="editFrameModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Campaign Name</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editFrameForm">
+                        <input type="hidden" id="editFrameId" name="frame_id">
+                        <div class="mb-3">
+                            <label for="editFrameName" class="form-label">Campaign Name</label>
+                            <input type="text" class="form-control" id="editFrameName" name="frame_name" maxlength="255" required>
+                        </div>
+                        <div id="editFrameMessage"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveFrameNameBtn">
+                        <i class="bi bi-check2"></i> Save Name
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -274,6 +314,10 @@ $stats['total_supporters'] = $supportersStats['total_supporters'];
             // Validate
             if (!$('#frameName').val() || !$('#frameFile').val()) {
                 alert('Please fill in all fields');
+                return;
+            }
+
+            if (!confirm('Create the campaign "' + $('#frameName').val().trim() + '" and upload this frame?')) {
                 return;
             }
             
@@ -326,12 +370,48 @@ $stats['total_supporters'] = $supportersStats['total_supporters'];
             });
         });
 
+        // Open the edit dialog without changing anything.
+        $('.edit-frame-btn').on('click', function() {
+            $('#editFrameId').val($(this).data('id'));
+            $('#editFrameName').val($(this).data('name'));
+            $('#editFrameMessage').empty();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('editFrameModal')).show();
+        });
+
+        // Confirm the name change immediately before submitting it.
+        $('#saveFrameNameBtn').on('click', function() {
+            const frameId = $('#editFrameId').val();
+            const frameName = $('#editFrameName').val().trim();
+
+            if (!frameName) {
+                $('#editFrameMessage').html('<div class="alert alert-danger">Campaign name is required.</div>');
+                return;
+            }
+
+            if (!confirm('Save the campaign name as "' + frameName + '"?')) {
+                return;
+            }
+
+            const button = $(this).prop('disabled', true);
+            $.post('edit-frame.php', { frame_id: frameId, frame_name: frameName }, function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    $('#editFrameMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    button.prop('disabled', false);
+                }
+            }, 'json').fail(function() {
+                $('#editFrameMessage').html('<div class="alert alert-danger">Unable to update the campaign name.</div>');
+                button.prop('disabled', false);
+            });
+        });
+
         // Delete frame
         $('.delete-frame-btn').on('click', function() {
             const frameId = $(this).data('id');
             const frameName = $(this).data('name');
             
-            if (confirm('Are you sure you want to delete "' + frameName + '"?')) {
+            if (confirm('Delete campaign "' + frameName + '"? This will permanently delete the frame, thumbnails, slots, and supporter records.')) {
                 $.post('delete-frame.php', { frame_id: frameId }, function(response) {
                     if (response.success) {
                         location.reload();
